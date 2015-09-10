@@ -5,8 +5,8 @@
 1.  [Introduction](#Introduction)
 2.  [User guide](#User_guide)
     1.  [Real Virtual Sensor Simulator](#Real_Virtual_Sensor_Simulator)
-    2.  [Publish/Subscribe Web Application](#Publish.2FSubscribe_Web_Application)
-    3.  [Request/Response Web Application](#Request.2FResponse_Web_Application)
+    2.  [Publish/Subscribe Web Application](#Subscribe_Web_Application)
+    3.  [Request/Response Web Application](#Response_Web_Application)
     4.  [Known Issues](#Known_Issues)
 3.  [Programmers guide](#Programmers_guide)
     1.  [API examples for device application developers](#app_dev_examples)
@@ -14,6 +14,7 @@
     3.  [API examples for service developers](#app_service_examples)
  
 
+<a name="Introduction"></a>
 # Introduction
 This documents describes instructions on how to use demo applications designed for Real Virtual Interaction backend ([FIWARE Catalogue link](http://catalogue.fiware.org/enablers/real-virtual-interaction)). For server installation, please refer to [Real Virtual Interaction - Installation and Administration Guide](/plugins/mediawiki/wiki/fiware/index.php/Real_Virtual_Interaction_-_Installation_and_Administration_Guide "Real Virtual Interaction - Installation and Administration Guide"). This guide consist of an Android application for simulating actuators and sensors, and publish/subscribe and request/response clients.
 
@@ -30,12 +31,13 @@ Source codes (for latest version of code):
 This User and Programmers Guide relates to the Real Virtual Interaction GE which is part of the [Advanced Middleware and Web User Interfaces chapter](/plugins/mediawiki/wiki/fiware/index.php/Advanced_Middleware_and_Web_UI_Architecture "Advanced Middleware and Web UI Architecture"). For more background information on this GE, also refer to its [API specification](http://docs.realvirtualinteraction.apiary.io/#).
 
 
-
+<a name="User_guide"></a>
 # User guide
 
 The user guides are meant for end-users using these application to test the Real Virtual Interaction Server. This guide includes 
 information regarding usage of these applications.
 
+<a name="Real_Virtual_Sensor_Simulator"></a>
 ## Real Virtual Sensor Simulator
 
 This Android application is designed to be a demo application for the Real Virtual Interaction backend. The application reads sensors available on an android device and sends this information to the Real Virtual Interaction backend which stores this information to be used by other demo applications such as the publish-subscribe client (JavaScript web application) and the request-response client (HTML web application). In essence this application emulates real world sensor data. Also this application offers one "actuator" which is the display. This Android application requires API level 14 device to work (see further details about suitable devices [here](http://source.android.com/source/build-numbers.html "http://source.android.com/source/build-numbers.html")). Also user needs to enable network access and preferably GPS (optional).
@@ -54,6 +56,7 @@ The main view shows the communication between the client and the server. In main
 This view represent a case where device display acts as an actuator where a remote HTTP POST call can be used to trigger the marker view display and what marker is to be shown. The application contains 60 ready made augmented reality markers used by
 the software. HTTP POST calls are being send to the real virtual interaction backend which will extract the query part and pass the message to last known IP address of the connected Android application. Android application will parse the received message and if it is in the right format, it will automatically change main view to show the marker requested in the query string. Otherwise the message will be display as a general inbound message with "yellow" color on the main view. 
 
+<a name="Subscribe_Web_Application"></a>
 ## Publish/Subscribe Web Application 
 
 This application is designed to receive and send data to the Android application by using the Real Virtual Interaction backend as a mediator. 
@@ -73,7 +76,8 @@ Figure 4 shows a view for all single entry values such represented by "primitive
 The view in Figure 5 shows a standard representation style for all "3Dpoint" type of arrays where each element represents X,Y,Z axis for instance.
 
 
-## <span class="mw-headline">Request/Response Web Application</span>
+<a name="Response_Web_Application"></a>
+## Request/Response Web Application
 
 This application is a sample page which holds standard html form elements. One purpose of this page is to enable user to demo that the server actually is receiving the data from the Android application. Also this page acts as a sample of a 3rd party service querying data from the Real Virtual Interaction backend. Using the RESTful data format it could be possible to dynamically embed new html form elements in to a web page. For instance, the case 3 showing the POST call form element could be loaded with information ready on the input fields when the web page is being loaded by the user. 
 
@@ -84,6 +88,7 @@ This application is a sample page which holds standard html form elements. One p
 
 [JSONLint](http://jsonlint.com/ "http://jsonlint.com/") is a good tool for validating and organizing the response query in more easily readable form.
 
+<a name="Known_Issues"></a>
 ## Known Issues
 
 If the sensor event arrive to PubSub client faster than it is able finish a render cycle there will be problems with drawing and might cause instability depending on browser. Some browser might have a fixed FPS limit and thus the minimum interval sensor events should be 1000 ms / MAX_FRAME_RATE. The current application does not have any logic to handle such occurance.
@@ -92,6 +97,7 @@ Not all browsers support Web Socket or Web GL. Current versions of Chrome and Fi
 
 The PubSub web application and Android application might not handle small screens very well. With small screen it is possible that the 3D visualization of web application might be drawn in wrong location and in Android some screen sizes have not been tested.
 
+<a name="Programmers_guide"></a>
 # Programmers guide
 
 The Real Virtual Sensor Simulator Android software can be imported in to an [Eclipse IDE](http://www.eclipse.org/downloads/ "http://www.eclipse.org/downloads/") as an Android project. You need to also download [Android SDK](https://developer.android.com/sdk/index.html "https://developer.android.com/sdk/index.html") and [ADT plugin](http://developer.android.com/tools/sdk/eclipse-adt.html "http://developer.android.com/tools/sdk/eclipse-adt.html"). Only way internal configurations can be changes is to download the source code and change them and compile a new .apk file. For using RealVirtuaInteraction backend, please have a look [API specification](http://docs.realvirtualinteraction.apiary.io/#).
@@ -103,6 +109,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Security implementations are not included in this specifications as they are highly dependable on type of 
 middleware service and chosen security level. For controlled public access api-keys or session-ids could be used. Alternatively for private access login information could be included in queries.
 
+<a name="app_dev_examples"></a>
 **API examples for device application developers**
 
 The Realvirtualinteraction backend will listen to incoming UDP packets and will drop packets that do not conform with the RESTful data format specification (version 1.0). The payload string MAY be Gzip compressed. Below
@@ -306,14 +313,13 @@ Server MUST respond with following HTTP header or handshake fails. Notice that t
   Sec-WebSocket-Protocol: chat
 </pre>
 
-<a name="app_service_examples">
-
+<a name="app_service_examples"></a>
 **API examples for service developers**
 
 Following example show how backend services SHALL communicate between each other using HTTP GET/POST methods. OPTIONALLY other HTTP methods such as PUT and DELETE MAY be used, but they are not supported by the real virtual interaction backend deliverable.
 
   
-*1\. Request all sensors with bound by a specific spatial bounds*
+***1\. Request all sensors with bound by a specific spatial bounds***
 
 A middleware web service SHOULD offer ways for other middleware services to specify retrievable devices by location and spatial bounds or OPTIONALLY by an IP address space. The spatial bound SHALL be either a square area with minimum and maximum values for coordinates, a circle with a centerpoint and radius or a complex shape.
 
@@ -491,7 +497,7 @@ Connection: close{
 The response header returns  radius and geo-coordinates which were set by the original request query. <i>Devices</i> JSONArray object contains all devices matching the query. Each device MAY contain multiple sensors and actuators. 
 
 
-2\. Request all data from a specific device by device UUID
+***2\. Request all data from a specific device by device UUID***
 
 A device SHOULD be considered as a micro controller board with capabilitis required to generate an <i>uuid</i>. A device MAY contain any number of sensors and actuators, and in any combination. If the requested sensor or actuator does not have uuid the request MUST target the device containing the desired sensor or actuator. 
 
@@ -675,7 +681,7 @@ Connection: close{
 The above response shows a general description how a JSON object returned by the middleware service could look like. 
 
 
-3\. Change value of a specific attribute of a sensor by ID, controller name, new value 
+***3\. Change value of a specific attribute of a sensor by ID, controller name, new value ***
 
 Middleware service MUST offer a way to change state of sensors or actuators. Sensors and actuators SHOULD publish configurable parameters. Middleware services MUST send state change requests as HTTP POST calls. POST request content MUST start with action definition.  
 
