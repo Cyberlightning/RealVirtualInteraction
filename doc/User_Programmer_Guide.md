@@ -19,13 +19,13 @@
 This documents describes instructions on how to use demo applications designed for Real Virtual Interaction backend ([FIWARE Catalogue link](http://catalogue.fiware.org/enablers/real-virtual-interaction)). For server installation, please refer to [Real Virtual Interaction - Installation and Administration Guide](/plugins/mediawiki/wiki/fiware/index.php/Real_Virtual_Interaction_-_Installation_and_Administration_Guide "Real Virtual Interaction - Installation and Administration Guide"). This guide consist of an Android application for simulating actuators and sensors, and publish/subscribe and request/response clients.
 
 This document is divided in to three parts:
-- Real Virtual Sensor Simulator (Android application)
-- Publish Subscribe client (JavaScript web application)
-- Request Response client (HTML web application)
+
+1. Real Virtual Sensor Simulator (Android application)
+2. Publish Subscribe client (JavaScript web application)
+3. Request Response client (HTML web application)
 
 
-Source codes (for latest version of code):
-- [RealVirtual source](https://github.com/Cyberlightning/RealVirtualInteraction "https://github.com/Cyberlightning/RealVirtualInteraction")
+Source codes (for latest version of code): [RealVirtual source](https://github.com/Cyberlightning/RealVirtualInteraction "https://github.com/Cyberlightning/RealVirtualInteraction")
 
 
 This User and Programmers Guide relates to the Real Virtual Interaction GE which is part of the [Advanced Middleware and Web User Interfaces chapter](/plugins/mediawiki/wiki/fiware/index.php/Advanced_Middleware_and_Web_UI_Architecture "Advanced Middleware and Web UI Architecture"). For more background information on this GE, also refer to its [API specification](http://docs.realvirtualinteraction.apiary.io/#).
