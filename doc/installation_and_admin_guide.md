@@ -165,8 +165,7 @@ You can start server in Linux for instance:
 Type Ctrl+A+D to detach screen and leave it running.
 
 <a name="Sanity_Checks"></a>
-Sanity Checks
-=============
+# Sanity Checks
 
 <a name="End_to_End_testing"></a>
 ## End to End testing
