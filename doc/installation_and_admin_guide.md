@@ -22,8 +22,7 @@ Real Virtual Interaction Installation and Administration Guide
     -   [5.4 I/O flows](#IO_flows)
 
 <a name="Introduction"></a>
-Introduction
-============
+# Introduction
 
 This guide if for installing and administering FIWARE Real Virtual
 Interaction Server. Although this guide is mainly for Real Virtual
@@ -31,8 +30,7 @@ Interaction Backend software, we have included some instructions about
 how to get the client application working as well.
 
 <a name="System_Requirements"></a>
-System Requirements
-===================
+# System Requirements
 
 Minumum requirements follow official Java SE 1.7 requirements. In excess
 the real virtual backend requires around 300KB of hard disk space +
@@ -42,8 +40,7 @@ data base should not arise over 1MB. Real virtual backend requires about
 heap 50MB.
 
 <a name="Hardware_Requirements"></a>
-Hardware Requirements
----------------------
+## Hardware Requirements
 
 Hardware with Windows and MacOS X
 
@@ -56,8 +53,7 @@ Hardware with Linux:
 -   Disk space: 58 MB
 
 <a name="Operating_System_Support"></a>
-Operating System Support
-------------------------
+## Operating System Support
 
 Windows:
 
@@ -82,8 +78,7 @@ Linux:
 -   Suse Linux Enterprise Server\* 10 SP2, 11.x
 
 <a name="Software_Requirements"></a>
-Software Requirements
----------------------
+## Software Requirements
 
 <a name="Client_Side"></a>
 ### Client Side
@@ -134,8 +129,7 @@ the server .
 -   [three.min.js](http://threejs.org/ "http://threejs.org/")
 
 <a name="Software_Installation_and_Configuration"></a>
-Software Installation and Configuration
-=======================================
+# Software Installation and Configuration
 
 In order to change the configuration of the real virtual interaction
 backend, you will need to make your own build. All server configurations
@@ -175,8 +169,7 @@ Sanity Checks
 =============
 
 <a name="End_to_End_testing"></a>
-End to End testing
-------------------
+## End to End testing
 
 To ensure that the real virtual interaction backend functions as
 required, the administrator can run a simulation test by starting the
@@ -232,8 +225,7 @@ real virtual interaction backend source code to test it. Just make sure
 that you type in localhost address (127.0.0.1).
 
 <a name="List_of_Running_Processes"></a>
-List of Running Processes
--------------------------
+## List of Running Processes
 
 The real virtual interaction backend will start one process with Java.
 You can for instance in Linux use
@@ -243,8 +235,7 @@ You can for instance in Linux use
 The process will show as "java" process run by the user.
 
 <a name="Network_interfaces_Up_and_Open"></a>
-Network interfaces Up & Open
-----------------------------
+## Network interfaces Up & Open
 
 -   UDP port: 61616 (by default)
 -   UDP port: 61617 (only needed for testing and is by default one
@@ -253,8 +244,7 @@ Network interfaces Up & Open
 -   TCP port: 44446 (by default)
 
 <a name="Databases"></a>
-Databases
----------
+## Databases
 
 The real virtual interaction backend will create the database files if
 they do not exist. There is no need for any SQL solution currently.
@@ -265,12 +255,10 @@ Default names for data base files:
 -   BaseStationReferenceDB.ser
 
 <a name="Diagnosis_Procedures"></a>
-Diagnosis Procedures
-====================
+# Diagnosis Procedures
 
 <a name="Resource_availability"></a>
-Resource availability
----------------------
+## Resource availability
 
 The GE is rather lightweight and is capable in running on a decent
 hardware with 1-2GB of RAM. Amount of harddisk is dedicated for
@@ -279,16 +267,14 @@ starters. The complete scaling of these attributes comes from the real
 amount of events the service needs to be able to handle.
 
 <a name="Remote_Service_Access"></a>
-Remote Service Access
----------------------
+## Remote Service Access
 
 Using a SSH enabled console to check the status of server. Otherwise NO
 external administration interface is being provided along with the
 deliverable.
 
 <a name="Resource_consumption"></a>
-Resource consumption
---------------------
+## Resource consumption
 
 The CPU load should be around 0-1% when there is not I/O events on
 server. Temporarily the server may use more CPU but if there is a stable
@@ -298,8 +284,7 @@ linux use following command to check CPU/Memory consumption:
     top -U <user>
 
 <a name="IO_flows"></a>
-I/O flows
----------
+## I/O flows
 
 -   UDP port 61616 (by default) does not accept larger than 1024 byte
     UDP packets. This is because larger than 1024 bytes may not be
