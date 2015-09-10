@@ -63,8 +63,6 @@ The view is divided in two sections. The section in right appends information re
 
 The title of tab acts as a link that opens a visual representation  of the data being withhold in the particular tab/sensor. Keep in mind that the link is a standard href and is only triggered from pixels of link text and thus may require few clicks occasionally. 
 
-ONKO TÄSSÄ JOKU ONGELMA??????
-
 ![Figure 4: Live data feed from the Real Virtual Sensor Simulator or any other where one-dimensional data is being normalized and represented in a 3D bar chart](images/Web_view.png "Figure 4: Live data feed from the Real Virtual Sensor Simulator or any other where one-dimensional data is being normalized and represented in a 3D bar chart")
 
 
@@ -284,8 +282,7 @@ function CreateWebSocket() {
 }
 </pre>
 
-The above JavaScript example initiates a connection to a webserver and starts
-  handshake with following HTTP header. 
+The above JavaScript example initiates a connection to a webserver and starts handshake with following HTTP header. 
 
 **REQUEST HEADER:**
 <pre>GET /chat HTTP/1.1
@@ -344,6 +341,7 @@ Below is a sample request header as received by the real virtual interaction bac
   Accept-Encoding: gzip, deflate
   Connection: keep-alive
 </pre>
+
 Below is a sample reponse header as send by the real virtual interaction backend. 
 
 **RESPONSE HEADER:**
