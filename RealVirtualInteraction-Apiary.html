@@ -1,0 +1,1603 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RealVirtualInteraction Specification</title>
+    <link href="css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/idea.css">
+    <script src="js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel="stylesheet" type="text/css" href="css/api-specification.css"> 
+
+    
+</head>
+<body id="respecDocument" class="h-entry">
+<div class="container">
+  <div id="TOC-container">
+    
+<section id="toc">
+
+        <div id="fiware-logo"></div>
+    <ul class="toc">
+
+
+    
+    
+
+    
+    
+    <li>
+        
+        <a href="#realvirtualinteraction" title = "RealVirtualInteraction" > RealVirtualInteraction </a>
+        
+    <ul class="toc">
+    
+   
+
+
+
+
+ </ul>
+</li>
+
+
+    
+    
+    <li>
+        
+        <a href="#api_examples_for_device_application_developers" title = "API examples for device application developers" > API examples for device application developers </a>
+        
+    <ul class="toc">
+    
+   
+
+
+
+
+ </ul>
+</li>
+
+
+    
+    
+    <li>
+        
+        <a href="#api_examples_for_application_developers" title = "API examples for application developers" > API examples for application developers </a>
+        
+    <ul class="toc">
+    
+   
+
+
+
+
+ </ul>
+</li>
+
+
+
+
+
+
+<li><a href="#API_specification">API Specification</a>
+    <ul class="toc">
+    
+
+                        <li>
+                            
+                                <a href="#resource_group_api-for-service-developers" title = "Group API for Service developers">Group API for Service developers</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_loadbyspatial" title = "Resource loadBySpatial">Resource loadBySpatial</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_load-sensors-by-spatial-search" title ="GET - Load sensors by spatial search">GET - Load sensors by spatial search</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                                
+                                    <li>
+                                        <a href="#resource_loadbyid" title = "Resource loadById">Resource loadById</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_load-sensor-by-id" title ="GET - Load sensor by Id">GET - Load sensor by Id</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                                
+                                    <li>
+                                        <a href="#resource_update" title = "Resource update">Resource update</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_update-device-by-id" title ="POST - Update device by Id">POST - Update device by Id</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+    <li><a href="#examples">Examples</a></li>
+    </ul>
+</li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <li><a href="#references">References</a></li>
+    
+   </ul>
+</section>
+
+  </div>
+  <div id="API-content">
+  
+	
+
+	
+
+	
+		<h1>RealVirtualInteraction </h1>
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+		<span class="dateLabel">DATE:</span> <span class="dateValue"> 07 Sep 2015 </span>
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+
+	
+		
+		<dl>
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				<dt class="versionLabel">This version:</dt> 
+				<dd class="versionValue"> <a href="http://polls.apiblueprint.org/v01">
+					http://polls.apiblueprint.org/v01</a> </dd>
+			
+		
+			
+		
+			
+		
+
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				<dt class="versionLabel">Previous version:</dt> 
+				<dd class="versionValue"> <a href="http://polls.apiblueprint.org/NA">
+					http://polls.apiblueprint.org/NA
+				</a> </dd>
+			
+		
+			
+		
+
+		<dt class="versionLabel">Latest version:</dt> 
+		<dd class="versionValue"> <a href="http://polls.apiblueprint.org/latest">http://polls.apiblueprint.org/latest</a> </dd>
+
+
+		</dl>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+		<h2 id="editors">Editors</h2>
+		<ul>
+<li>Sami Jylkkä, Cyberlightning Ltd</li>
+</ul>
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+		<h2 id="copyright">Copyright</h2>
+		<p>All rights reserved. No part of this publication may be reproduced, distributed, 
+or transmitted in any form or by any means, including photocopying, recording, or other electronic or 
+mechanical methods, without the prior written permission of the publisher, except in the case of brief quotations 
+embodied in critical reviews and certain other noncommercial uses permitted by copyright law. For permission requests, 
+write to the publisher, addressed “Attention: Permissions Coordinator,” at the address below.</p>
+	
+
+
+<hr>
+
+
+	<h2 id="abstract">Abstract</h2>
+	<p>This specification defines the RealVirtualInteraction API.</p>
+
+
+
+
+	
+
+	
+		<h2 id="status">Status of this document</h2>
+		<p>This is completed API for virtual Interaction. </p>
+<p>This specification is licensed under the 
+<a href="http://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/FI-WARE_Open_Specification_Legal_Notice_%28essential_patents_license%29">FIWARE Open Specification License</a>.</p>
+	
+
+	
+
+<hr>
+
+    
+    
+
+
+
+
+	
+		
+	
+	
+		
+	
+		
+	
+		
+	
+
+
+
+
+	
+	
+	
+		
+	
+		
+	
+		
+	
+
+
+	
+		
+            <section>
+			    <h1 id="realvirtualinteraction">RealVirtualInteraction</h1>
+			    <p>Real Virtual Interaction generic enabler (GE) provides means for connecting real world devices consisting of 
+sensors and actuators in to augmented or virtual reality applications. Since the real world sensors and 
+actuators are not complex enough to contain necessary logic to publish themselves outside their immediate 
+domain there needs to be a external service that is able to access these devices and to be able to share 
+the access to other services and also directly to end-users. This service provides security, data base for 
+storing history and offline data, scalability and other cloud-like features that make it easier for application
+and service developers to make use of the devices in various purposes. This GE also provides a practical 
+prototype for publishing sensor and actuator information application developers derived from NGSI 9/10 
+format developed earlier in FIWARE.</p>
+<p>This GE will provide two APIs for accessing sensors or actuators:</p>
+<ul>
+<li>API for service developers</li>
+<li>API for application developers</li>
+</ul>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", 
+and "OPTIONAL" in this document are to be interpreted as described in 
+<a href="https://www.ietf.org/rfc/rfc2119.txt">[RFC2119]</a>. The key word REMOTEHOST can be 
+replaced by either IP address or DNS host name. Also port number for middleware service can differ from IANA standard 
+which is 80 for the WebSocket and 8080 for HTTP. The key words GET,POST,PUT and DELETE are http methods and appear 
+capitalized each time they occur in the specifications.</p>
+<p>Security implementations are not included in this specifications as they are highly dependable on type of middleware 
+service and chosen security level. For controlled public access api-keys or session-ids could be used. 
+Alternatively for private access login information could be included in queries.</p> 
+            </section>
+		
+	
+	
+
+
+
+
+	
+	
+	
+
+
+	
+		
+            <section>
+			    <h1 id="api_examples_for_device_application_developers">API examples for device application developers</h1>
+			    <p>The Realvirtualinteraction backend will listen to incoming UDP packets and will drop packets that do not conform 
+to the RESTful data format specification (version 1.0). The payload string MAY be Gzip compressed. </p>
+<p>Below JSON string is an example how the device developers should public sensor/actuator information to the server. 
+The "dataformat_version" field will be removed after the packet is being received by the server and will not be 
+passed on to possible clients subscribed listening for incoming events. For instance the existing logic could be 
+extended to include other fields such as API-KEY to ensure that only registered devices may publish to server. 
+This could be the first step to add a layer of security.</p>
+<pre><code>{  
+  &quot;dataformat_version&quot;:&quot;1.0&quot;,
+  &quot;d23c058698435eff&quot;:{  
+    &quot;d23c058698435eff&quot;:{  
+      &quot;sensors&quot;:[  
+        {  
+          &quot;value&quot;:{  
+            &quot;unit&quot;:&quot;uT&quot;,
+            &quot;primitive&quot;:&quot;3DPoint&quot;,
+            &quot;time&quot;:&quot;2014-02-19 09:40:06&quot;,
+            &quot;values&quot;:[  
+              17.819183349609375,
+              0.07265311479568481,
+              -0.4838427007198334
+            ]
+          },
+          &quot;configuration&quot;:[  
+            {  
+              &quot;interval&quot;:&quot;ms&quot;,
+              &quot;toggleable&quot;:&quot;boolean&quot;
+            }
+          ],
+          &quot;attributes&quot;:{  
+            &quot;type&quot;:&quot;orientation&quot;,
+            &quot;power&quot;:0.5,
+            &quot;vendor&quot;:&quot;Invensense&quot;,
+            &quot;name&quot;:&quot;MPL magnetic field&quot;
+          }
+        },
+        {  
+          &quot;value&quot;:{  
+            &quot;unit&quot;:&quot;uT&quot;,
+            &quot;primitive&quot;:&quot;3DPoint&quot;,
+            &quot;time&quot;:&quot;2014-02-19 09:40:06&quot;,
+            &quot;values&quot;:[  
+              17.819183349609375,
+              0.07265311479568481,
+              -0.4838427007198334
+            ]
+          },
+          &quot;configuration&quot;:[  
+            {  
+              &quot;interval&quot;:&quot;ms&quot;,
+              &quot;toggleable&quot;:&quot;boolean&quot;
+            }
+          ],
+          &quot;attributes&quot;:{  
+            &quot;type&quot;:&quot;gyroscope&quot;,
+            &quot;power&quot;:0.5,
+            &quot;vendor&quot;:&quot;Invensense&quot;,
+            &quot;name&quot;:&quot;MPL magnetic field&quot;
+          }
+        },
+        {  
+          &quot;value&quot;:{  
+            &quot;unit&quot;:&quot;uT&quot;,
+            &quot;primitive&quot;:&quot;3DPoint&quot;,
+            &quot;time&quot;:&quot;2014-02-19 09:40:06&quot;,
+            &quot;values&quot;:[  
+              17.819183349609375,
+              0.07265311479568481,
+              -0.4838427007198334
+            ]
+          },
+          &quot;configuration&quot;:[  
+            {  
+              &quot;interval&quot;:&quot;ms&quot;,
+              &quot;toggleable&quot;:&quot;boolean&quot;
+            }
+          ],
+          &quot;attributes&quot;:{  
+            &quot;type&quot;:&quot;magneticfield&quot;,
+            &quot;power&quot;:0.5,
+            &quot;vendor&quot;:&quot;Invensense&quot;,
+            &quot;name&quot;:&quot;MPL magnetic field&quot;
+          }
+        },
+        {  
+          &quot;value&quot;:{  
+            &quot;unit&quot;:&quot;m/s2&quot;,
+            &quot;primitive&quot;:&quot;3DPoint&quot;,
+            &quot;time&quot;:&quot;2014-02-19 09:40:06&quot;,
+            &quot;values&quot;:[  
+              0.006436614785343409,
+              0.003891906701028347,
+              -0.5983058214187622
+            ]
+          },
+          &quot;configuration&quot;:[  
+            {  
+              &quot;interval&quot;:&quot;ms&quot;,
+              &quot;toggleable&quot;:&quot;boolean&quot;
+            }
+          ],
+          &quot;attributes&quot;:{  
+            &quot;type&quot;:&quot;linearacceleration&quot;,
+            &quot;power&quot;:1.5,
+            &quot;vendor&quot;:&quot;Google Inc.&quot;,
+            &quot;name&quot;:&quot;Linear Acceleration Sensor&quot;
+          }
+        }
+      ],
+      &quot;actuators&quot;:[  
+        {  
+          &quot;configuration&quot;:[  
+            {  
+              &quot;value&quot;:&quot;100&quot;,
+              &quot;unit&quot;:&quot;percent&quot;,
+              &quot;name&quot;:&quot;viewsize&quot;
+            }
+          ],
+          &quot;actions&quot;:[  
+            {  
+              &quot;value&quot;:&quot;[marker1,marker2,marker3]&quot;,
+              &quot;primitive&quot;:&quot;array&quot;,
+              &quot;unit&quot;:&quot;string&quot;,
+              &quot;parameter&quot;:&quot;viewstate&quot;
+            }
+          ],
+          &quot;callbacks&quot;:[  
+            {  
+              &quot;target&quot;:&quot;viewstate&quot;,
+              &quot;return_type&quot;:&quot;boolean&quot;
+            }
+          ],
+          &quot;attributes&quot;:{  
+            &quot;dimensions&quot;:&quot;[480,800]&quot;
+          }
+        }
+      ],
+      &quot;attributes&quot;:{  
+        &quot;name&quot;:&quot;Android device&quot;
+      }
+    }
+  }
+}
+</code></pre> 
+            </section>
+		
+	
+	
+
+
+
+
+	
+	
+	
+
+
+	
+		
+            <section>
+			    <h1 id="api_examples_for_application_developers">API examples for application developers</h1>
+			    <p>Following code and header samples enable a real-time connection over TCP/IP to be formed with a server application. 
+Once a connection is established, sensor events MAY be pushed to clients from server in real-time. 
+The connection is full-duplex meaning that also a client MAY send messages directly to sensors in through a web server. 
+This sort of full-duplex connection MAY be considered as publish/subscribe type of connection where client MAY 
+choose which sensor to subscribe to receive event updates from. The web service SHALL provide the client a list 
+of available sensors or OPTIONALLY a client MAY use third party service to find sensors. 
+WebSocket SHOULD be then used to form direct connection to the sensors through a IoT Broker type of 
+web server component.</p>
+<p><b>JavaScript client sample:</b></p>
+<pre><code class="js">function CreateWebSocket() {
+    if (&quot;WebSocket&quot; in window) {
+     ws = new WebSocket(&quot;ws://REMOTEHOST&quot;);
+
+     ws.onopen = function() {
+       alert(&quot;Connection established to web server&quot;);
+     };
+     ws.onmessage = function (evt) {
+       alert(&quot;Message received from web server: &quot; + evt.data); 
+     };
+     ws.onclose = function() {
+        alert(&quot;Connection is closed...&quot;);
+     };
+  }
+  else {
+     alert(&quot;WebSocket NOT supported by your Browser!&quot;);
+  }
+}
+</code></pre> 
+            </section>
+		
+	
+	
+
+
+
+
+	
+	
+	
+
+
+
+    
+
+  
+  <section id="API_specification">
+      <h1>API Specification</h1>
+      
+
+
+
+
+        
+            <section id="resource_group_api-for-service-developers" class="resourceGroup">
+            <h2 id="h-resource_group_api-for-service-developers">API for Service developers</h2>
+        
+	<p>Following shows how backend services SHALL communicate between each other using HTTP GET/POST 
+methods.</p>
+        
+            <section id="resource_loadbyspatial" class="resource">
+                <h3 id="h-resource_loadbyspatial">loadBySpatial [/?action=loadBySpatial&amp;lat={lat}&amp;lon={lon}&amp;radius={radius}&amp;maxResults={maxResults}]</h3>
+                <p><b>loadBySpatial</b> can be used for requestuesting all sensors within specific spatial bounding area.
+geo-coordinate center point and radius in meters.</p>
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				lat (Required, Center latitude)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				lon (Required, Center longitude)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				radius (Required, Search circle radius)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				maxResults (Required, Max number of search results)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+	</dl>
+
+
+                    
+                        
+                            <div id="action_load-sensors-by-spatial-search" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_load-sensors-by-spatial-search">
+        Load sensors by spatial search -
+        GET
+        
+            /?action=loadBySpatial&amp;lat={lat}&amp;lon={lon}&amp;radius={radius}&amp;maxResults={maxResults}
+        
+    </h4>
+
+        
+                            <div id="load-sensors-by-spatial-search_body" class="">
+                                <p>Example shows an example where POI middleware service requests all devices available within a specific circular area 
+with a geo-coordinate center point and radius in meters.</p>
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_load-sensors-by-spatial-search_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.RealVirtualInteraction.apiary.io/#reference/api-for-service-developers/loadbyspatial/load-sensors-by-spatial-search">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+            <section id="resource_loadbyid" class="resource">
+                <h3 id="h-resource_loadbyid">loadById [/?action=loadById&amp;device_id=440cd2d8c18d7d3a&amp;maxResults=1]</h3>
+                <p><b>loadById</b> is used for requesting sensor data based on the device uuid.
+A device MAY contain any number of sensors and actuators, and in any combination. 
+If the requested sensor or actuator does not have uuid the request MUST target the device containing the 
+desired sensor or actuator. </p>
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_load-sensor-by-id" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_load-sensor-by-id">
+        Load sensor by Id -
+        GET
+        
+            /?action=loadById&amp;device_id=440cd2d8c18d7d3a&amp;maxResults=1
+        
+    </h4>
+
+        
+                            <div id="load-sensor-by-id_body" class="">
+                                <p>Example shows how a middleware service retrieves all available 
+information regarding a specific device by using an uuid string identifier.</p>
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_load-sensor-by-id_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.RealVirtualInteraction.apiary.io/#reference/api-for-service-developers/loadbyid/load-sensor-by-id">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+            <section id="resource_update" class="resource">
+                <h3 id="h-resource_update">update [/?action=update&amp;device_id={device_id}&amp;sensor_id=display&amp;parameter={parameter}&amp;value={value}]</h3>
+                <p><b>update</b> HTTP POST method can be used for changing updatable sensor values. 
+Real virtual interaction backend uses the <i>device_id parameter</i> and looks up the IP address from reference table 
+and passes only the content of the query forward to the particular sensor. If an IP address is found from the 
+reference table, the server will respond with <code>200 OK</code> without actually knowing whether the message reached 
+its destination as the transport mechanism is UDP. Otherwise server will respond with <code>404 NOT FOUND</code>.</p>
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				device_id (Required, )
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				parameter (Required, string)
+			</dt>
+			<dd>
+				Parameter to be updat
+				
+			</dd>
+		
+			<dt>
+				value (Required, string)
+			</dt>
+			<dd>
+				new value
+				
+			</dd>
+		
+	</dl>
+
+
+                    
+                        
+                            <div id="action_update-device-by-id" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_update-device-by-id">
+        Update device by Id -
+        POST
+        
+            /?action=update&amp;device_id={device_id}&amp;sensor_id=display&amp;parameter={parameter}&amp;value={value}
+        
+    </h4>
+
+        
+                            <div id="update-device-by-id_body" class="">
+                                <p>Example shows how to use HTTP POST request to turn change augmented reality marker on an Android application remotely.</p>
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_update-device-by-id_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.RealVirtualInteraction.apiary.io/#reference/api-for-service-developers/update/update-device-by-id">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+<section id="examples">
+    <h2>Examples</h2>
+    
+        
+            <section id="resource_group_api-for-service-developers_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_api-for-service-developers_example">API for Service developers</h3>
+        
+
+                
+                    <section id="resource_loadbyspatial_example" class="resourceExample">
+                        <h4 id="h-resource_loadbyspatial_example">loadBySpatial [/?action=loadBySpatial&amp;lat={lat}&amp;lon={lon}&amp;radius={radius}&amp;maxResults={maxResults}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				lat (Required, Center latitude)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				lon (Required, Center longitude)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				radius (Required, Search circle radius)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				maxResults (Required, Max number of search results)
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+	</dl>
+
+
+                            
+                                <div id="action_load-sensors-by-spatial-search_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_load-sensors-by-spatial-search_examples">
+        Load sensors by spatial search -
+        GET
+        
+            /?action=loadBySpatial&amp;lat={lat}&amp;lon={lon}&amp;radius={radius}&amp;maxResults={maxResults}
+        
+    </h4>
+
+                
+                                    <div id="action_load-sensors-by-spatial-search_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_load-sensors-by-spatial-search_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "8587cdb9a135fa2a": {
+            "sensors": [
+                {
+                    "values": [
+                        {
+                            "unit": "lx",
+                            "time": "2014-02-17 14:35:53",
+                            "values": 58.607452,
+                            "primitive": "double"
+                        }
+                    ],
+                    "attributes": {
+                        "vendor": "Sharp",
+                        "name": "GP2A Light sensor",
+                        "power": 0.75,
+                        "type": "light"
+                    },
+                    "configuration": [
+                        {
+                            "interval": "ms",
+                            "toggleable": "boolean"
+                        }
+                    ]
+                },
+                {
+                    "values": [
+                        {
+                            "unit": "uT",
+                            "time": "2014-02-17 14:35:53",
+                            "values": [
+                                10.400009155273438,
+                                -16.688583374023438,
+                                -37.505584716796875
+                            ],
+                            "primitive": "3DPoint"
+                        }
+                    ],
+                    "attributes": {
+                        "vendor": "Invensense",
+                        "name": "MPL Magnetic Field",
+                        "power": 4,
+                        "type": "magneticfield"
+                    },
+                    "configuration": [
+                        {
+                            "interval": "ms",
+                            "toggleable": "boolean"
+                        }
+                    ]
+                },
+                {
+                    "values": [
+                        {
+                            "unit": "hPa",
+                            "time": "2014-02-17 14:35:53",
+                            "values": 989.56,
+                            "primitive": "double"
+                        }
+                    ],
+                    "attributes": {
+                        "vendor": "Bosch",
+                        "name": "BMP180 Pressure sensor",
+                        "power": 0.6700000166893005,
+                        "type": "pressure"
+                    },
+                    "configuration": [
+                        {
+                            "interval": "ms",
+                            "toggleable": "boolean"
+                        }
+                    ]
+                }
+            ],
+            "attributes": {
+                "name": "Android device"
+            },
+            "actuators": [
+                {
+                    "callbacks": [
+                        {
+                            "target": "viewstate",
+                            "return_type": "boolean"
+                        }
+                    ],
+                    "attributes": {
+                        "dimensions": "[720,1184]"
+                    },
+                    "configuration": [
+                        {
+                            "unit": "percent",
+                            "name": "viewsize",
+                            "value": "100"
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "unit": "string",
+                            "parameter": "viewstate",
+                            "value": "[marker1,marker2,marker3,]",
+                            "primitive": "array"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_load-sensors-by-spatial-search">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+                    <section id="resource_loadbyid_example" class="resourceExample">
+                        <h4 id="h-resource_loadbyid_example">loadById [/?action=loadById&amp;device_id=440cd2d8c18d7d3a&amp;maxResults=1]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_load-sensor-by-id_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_load-sensor-by-id_examples">
+        Load sensor by Id -
+        GET
+        
+            /?action=loadById&amp;device_id=440cd2d8c18d7d3a&amp;maxResults=1
+        
+    </h4>
+
+                
+                                    <div id="action_load-sensor-by-id_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_load-sensor-by-id_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "440cd2d8c18d7d3a": {
+            "actuators": [
+                {
+                    "configuration": [
+                        {
+                            "unit": "percent",
+                            "name": "viewsize",
+                            "value": "100"
+                        }
+                    ],
+                    "callbacks": [
+                        {
+                            "return_type": "boolean",
+                            "target": "viewstate"
+                        }
+                    ],
+                    "attributes": {
+                        "dimensions": "[480,800]"
+                    },
+                    "actions": [
+                        {
+                            "unit": "string",
+                            "primitive": "array",
+                            "parameter": "viewstate",
+                            "value": "[marker1,marker2,marker13]"
+                        }
+                    ]
+                }
+            ],
+            "sensors": [
+                {
+                    "configuration": [
+                        {
+                            "toggleable": "boolean",
+                            "interval": "ms"
+                        }
+                    ],
+                    "values": {
+                        {
+                            "unit": "rads",
+                            "primitive": "3DPoint",
+                            "values": [
+                                21.117462158203125,
+                                -0.9801873564720154,
+                                -0.6045787930488586
+                            ],
+                            "time": "2013-12-10 10:07:30"
+                        }
+                    },
+                    "attributes": {
+                        "vendor": "Invensense",
+                        "name": "MPL Gyro",
+                        "power": 0.5,
+                        "type": "gyroscope"
+                    }
+                },
+                {
+                    "configuration": [
+                        {
+                            "toggleable": "boolean",
+                            "interval": "ms"
+                        }
+                    ],
+                    "values": {
+                        {
+                            "unit": "ms2",
+                            "primitive": "3DPoint",
+                            "values": [
+                                149.10000610351562,
+                                420.20001220703125,
+                                -1463.9000244140625
+                            ],
+                            "time": "2013-12-10 10:07:30"
+                        }
+                    },
+                    "attributes": {
+                        "vendor": "Invensense",
+                        "name": "MPL accel",
+                        "power": 0.5,
+                        "type": "accelerometer"
+                    }
+                },
+                {
+                    "configuration": [
+                        {
+                            "toggleable": "boolean",
+                            "interval": "ms"
+                        }
+                    ],
+                    "values": {
+                        {
+                            "unit": "uT",
+                            "primitive": "3DPoint",
+                            "values": [
+                                -0.08577163517475128,
+                                0.16211289167404175,
+                                9.922416687011719
+                            ],
+                            "time": "2013-12-10 10:07:30"
+                        }
+                    },
+                    "attributes": {
+                        "vendor": "Invensense",
+                        "name": "MPL magnetic field",
+                        "power": 0.5,
+                        "type": "magneticfield"
+                    }
+                },
+                {
+                    "configuration": [
+                        {
+                            "toggleable": "boolean",
+                            "interval": "ms"
+                        }
+                    ],
+                    "values": {
+                        {
+                            "unit": "orientation",
+                            "primitive": "3DPoint",
+                            "values": [
+                                -0.004261057823896408,
+                                -0.017044231295585632,
+                                0.019174760207533836
+                            ],
+                            "time": "2013-12-10 10:07:30"
+                        }
+                    },
+                    "attributes": {
+                        "vendor": "Invensense",
+                        "name": "MPL Orientation (android deprecated format)",
+                        "power": 9.699999809265137,
+                        "type": "orientation"
+                    }
+                }
+            ],
+            "attributes": {
+                "name": "Android device"
+            }
+        }
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_load-sensor-by-id">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+                    <section id="resource_update_example" class="resourceExample">
+                        <h4 id="h-resource_update_example">update [/?action=update&amp;device_id={device_id}&amp;sensor_id=display&amp;parameter={parameter}&amp;value={value}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				device_id (Required, )
+			</dt>
+			<dd>
+				
+				
+			</dd>
+		
+			<dt>
+				parameter (Required, string)
+			</dt>
+			<dd>
+				Parameter to be updat
+				
+			</dd>
+		
+			<dt>
+				value (Required, string)
+			</dt>
+			<dd>
+				new value
+				
+			</dd>
+		
+	</dl>
+
+
+                            
+                                <div id="action_update-device-by-id_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_update-device-by-id_examples">
+        Update device by Id -
+        POST
+        
+            /?action=update&amp;device_id={device_id}&amp;sensor_id=display&amp;parameter={parameter}&amp;value={value}
+        
+    </h4>
+
+                
+                                    <div id="action_update-device-by-id_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_update-device-by-id_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_update-device-by-id">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+
+
+
+</section>
+  </section>
+  
+   
+
+
+
+	
+
+	
+
+	
+
+    
+    
+    
+      <section id="references">
+      <h1>References</h1>
+          <ul>
+              
+                  <li><a href="http://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/FI-WARE_Open_Specification_Legal_Notice_%28essential_patents_license%29">FIWARE Open Specification License</a></li>
+              
+          </ul>
+      </section>
+    
+  </div>
+</div>
+</body>
+</html>
