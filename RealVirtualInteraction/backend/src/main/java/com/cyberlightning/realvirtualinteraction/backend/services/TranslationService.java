@@ -152,8 +152,9 @@ public abstract class TranslationService {
 						if (attrKey.contentEquals("gps")) {
 							
 							JSONArray loc = (JSONArray) attributes.get(attrKey); //TODO could 
-							e.location[0] = (double)loc.get(0);
-							e.location[1] = (double)loc.get(1);
+							e.location[0] = new Double(loc.get(0).toString());
+				                        e.location[1] = new Double(loc.get(1).toString());
+				                        e.attributes.put(attrKey,loc);;
 							
 						} else {
 							e.attributes.put(attrKey, attributes.get(attrKey));

@@ -26,273 +26,296 @@ import com.cyberlightning.realvirtualinteraction.backend.services.MessageService
 
 public class WebSocketWorker implements Runnable {
 
-	private Socket clientSocket;
-	public String serverResponse = new String();
-	private InputStream input;
-	private OutputStream output;
-	private SendWorker sendWorker;
-	
-	private volatile boolean isConnected = true;
-	public final String uuid = UUID.randomUUID().toString();
-	public final int type =  StaticResources.TCP_CLIENT;
-	
-	public static final String WEB_SOCKET_SERVER_RESPONSE = 
-			"HTTP/1.1 101 Switching Protocols\r\n"	+
-			"Upgrade: websocket\r\n"	+
-			"Connection: Upgrade\r\n" +
-			"Sec-WebSocket-Accept: ";
-
-	/**
-	 * 	
-	 * @param _parent
-	 * @param _client
-	 */
-	public WebSocketWorker (Socket _client) {
-		this.clientSocket = _client;
-		
-	}
-	
-	/**
-	 * Handles handshaking between connecting client and server
-	 */
-	private void doHandShake() {
-		try {
-			this.input = this.clientSocket.getInputStream();
-			this.output = this.clientSocket.getOutputStream();
-			System.out.println("new client attempting connection");
-			BufferedReader inboundBuffer= new BufferedReader(new InputStreamReader(this.input));
-			DataOutputStream outboundBuffer = new DataOutputStream(this.output);
-			
-			String line;
-			while( !(line=inboundBuffer.readLine()).isEmpty() ) {  
-				 parseRequestLine(line);                 
-			}  
-			
-			outboundBuffer.writeBytes(this.serverResponse);
-			outboundBuffer.flush();
-			
-			System.out.println("Handshake complete");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Parses the client request for security key and generates header for server response to complete the handshake
-	 * @param _request
-	 */
-	public void parseRequestLine(String _request)  {
-		System.out.println("CLIENT REQUEST: " +_request);
-		if (_request.contains("Sec-WebSocket-Key: ")) {
-			this.serverResponse = WEB_SOCKET_SERVER_RESPONSE + generateSecurityKeyAccept(_request.replace("Sec-WebSocket-Key: ", "")) + "\r\n\r\n";
-		} 
-	}
-	
-	/**
-	 * Generates security key for the session using magic string and generated key.
-	 * @param _secKey Client security key
-	 * @return Server security key
-	 */
-	private String generateSecurityKeyAccept (String _secKey) {
-		
-		try {
-			MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
-			byte[] secKeyByte = (_secKey + StaticResources.MAGIC_STRING).getBytes();
-			secKeyByte = sha1.digest(secKeyByte);
-			_secKey = Base64.encodeBase64String(secKeyByte);
-			
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return _secKey;
-	}
-	
-	@Override
-	public void run() {
-	
-		System.out.println(this.clientSocket.getInetAddress().getAddress().toString() + StaticResources.CLIENT_CONNECTED);
-		this.doHandShake();
-		
-		this.sendWorker = new SendWorker();
-		
-		while(this.isConnected) {
-		
-			try {
-					int opcode = this.input.read();  
-				    @SuppressWarnings("unused")
-					boolean whole = (opcode & 0b10000000) !=0;  
-				    opcode = opcode & 0xF;
-				    
-				    if (opcode != 8) { 
-				    	 
-				    	//handleClientMessage(read());  //TODO implement how to subscribe by basestation id not socket class uuid.
-				    	testHandle(read());
-				    	
-				    	 
-				    } else {
-				    	 
-					    /*|Opcode  | Meaning                             | Reference |
-					     -+--------+-------------------------------------+-----------|
-					      | 0      | Continuation Frame                  | RFC 6455  |
-					     -+--------+-------------------------------------+-----------|
-					      | 1      | Text Frame                          | RFC 6455  |
-					     -+--------+-------------------------------------+-----------|
-					      | 2      | Binary Frame                        | RFC 6455  |
-					     -+--------+-------------------------------------+-----------|
-					      | 8      | Connection Close Frame              | RFC 6455  |
-				     	 -+--------+-------------------------------------+-----------|
-					      | 9      | Ping Frame                          | RFC 6455  |
-					     -+--------+-------------------------------------+-----------|
-					      | 10     | Pong Frame                          | RFC 6455  |*/
-				    	 
-				    	System.out.println("Client message type: " + opcode);
-				    	this.closeSocketGracefully();
-				    }
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Connecttion interrupted: " + e.getLocalizedMessage());
-				this.closeSocketGracefully();
-			}
-		}
-		System.out.println(this.clientSocket.getInetAddress().getAddress().toString() + StaticResources.CLIENT_DISCONNECTED);
-		return;	//Exits thread
-	}
-	
-	private void testHandle(String _request) { 
-		ArrayList<String> devices = new ArrayList<String> ();
-		devices.add(UdpSocket.uuid);
-		MessageService.getInstance().subscribeByIds(devices, this.uuid);
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private void handleClientMessage(String _request) {
-		String[] result = _request.split("\n");
-		int fromIndex =  result[0].indexOf("?");
-		int toIndex = result[0].indexOf("HTTP");
-		
-		/* Passes the urlencoded query string to appropriate http method handlers*/
-		if (result[0].trim().toUpperCase().contains("GET")) {
-			this.handleGETMethod(result[0].substring(fromIndex + 1, toIndex).trim());
-		
-		}
-		else if (result[0].trim().toUpperCase().contains("POST")) {
-			
-			fromIndex =  result[0].indexOf("/");
-			String content = result[0].substring(fromIndex, toIndex);
-			if (content.trim().contentEquals("/")) {
-				this.handlePOSTMessage(result[result.length-1].toString());
-			} else {
-				send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
-			}
-			
-		}
-		else if (result[0].trim().toUpperCase().contains("PUT")) {
-			send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
-		}
-		else if (result[0].trim().toUpperCase().contains("DELETE")) {
-			send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param _msg
-	 */
-	public void handlePOSTMessage(String _msg) { //TODO design post method options
-		
-		String[] queries = _msg.split("&");
-		String[] targetUUIDs = null;
-			
-		for (int i = 0; i < queries.length; i++) {
-				
-			if(queries[i].contains("action")) {
-				String[] action = queries[i].split("=");
-					
-				if (action[1].contentEquals("update")) {
-					
-					for (int j = 0; j < queries.length; j++) {
-					
-						if (queries[j].contains("device_id")) {
-							String[] s = queries.clone()[j].trim().split("=");
-							targetUUIDs = s[1].split(","); //check correct regex
-						} 
-					}
-				}
-			}
-				
-		} if (targetUUIDs == null) {
-			try {
-				send(StaticResources.ERROR_CODE_BAD_REQUEST);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			MessageService.getInstance().addToMessageBuffer(new MessageObject(this.uuid,StaticResources.TCP_CLIENT,DataStorageService.getInstance().resolveBaseStationAddresses(targetUUIDs),_msg));
-		}
-	}
-	
-	/**
-	 * 
-	 * @param _content
-	 */
-	private void handleGETMethod(String _content) {
-		
-		String[] queries = _content.split("&");
-		
-		for (int i = 0; i < queries.length; i++) {
-			if(queries[i].contains("action")) {
-				String[] action = queries[i].split("=");
-				if (action[1].contentEquals("subscribeById")) {
-					for (int j = 0; j < queries.length;j++) {
-						if (queries[j].contains("device_id")) {
-							String[] device = queries[j].split("=");
-							String[] targetUUIDs = device[1].split(",");
-							MessageService.getInstance().subscribeByIds(DataStorageService.getInstance().resolveBaseStationUuids(targetUUIDs),uuid);
-						}
-					}
-					
-				} else if (action[1].contentEquals("unsubscribeById")) {
-					
-					//TODO not implemented yet
-				} else if (action[1].contentEquals("unsubscribeAll")) {
-					MessageService.getInstance().unregisterReceiver(uuid);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	private void closeSocketGracefully() {
-		try {	
-			MessageService.getInstance().unsubscribeAllById(this.uuid);
-			this.sendWorker.destroy();
-			this.isConnected = false;
-			this.input.close();
-			this.clientSocket.close();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @param b
-	 * @throws IOException
-	 */
-	private void readFully(byte[] b) throws IOException {  
-        
+    private Socket clientSocket;
+    public String serverResponse = new String();
+    private InputStream input;
+    private OutputStream output;
+    private SendWorker sendWorker;
+    
+    private volatile boolean isConnected = true;
+    public final String uuid = UUID.randomUUID().toString();
+    public final int type =  StaticResources.TCP_CLIENT;
+    
+    public static final String WEB_SOCKET_SERVER_RESPONSE = 
+    "HTTP/1.1 101 Switching Protocols\r\n"	+
+            "Upgrade: websocket\r\n"	+
+            "Connection: Upgrade\r\n" +
+            "Sec-WebSocket-Accept: ";
+    
+    /**
+     * 	
+     * @param _parent
+     * @param _client
+     */
+    public WebSocketWorker (Socket _client) {
+        this.clientSocket = _client;
+    
+    }
+    
+    /**
+     * Handles handshaking between connecting client and server
+     */
+    private void doHandShake() {
+        try {
+            this.input = this.clientSocket.getInputStream();
+            this.output = this.clientSocket.getOutputStream();
+            System.out.println("new client attempting connection");
+            BufferedReader inboundBuffer= new BufferedReader(new InputStreamReader(this.input));
+            DataOutputStream outboundBuffer = new DataOutputStream(this.output);
+    
+            String line;
+            while( !(line=inboundBuffer.readLine()).isEmpty() ) {  
+                parseRequestLine(line);                 
+            }  
+    
+            outboundBuffer.writeBytes(this.serverResponse);
+            outboundBuffer.flush();
+    
+            System.out.println("Handshake complete");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Parses the client request for security key and generates header for server response to complete the handshake
+     * @param _request
+     */
+    public void parseRequestLine(String _request)  {
+        System.out.println("CLIENT REQUEST: " +_request);
+        if (_request.contains("Sec-WebSocket-Key: ")) {
+            this.serverResponse = WEB_SOCKET_SERVER_RESPONSE + generateSecurityKeyAccept(_request.replace("Sec-WebSocket-Key: ", "")) + "\r\n\r\n";
+        } 
+    }
+    
+    /**
+     * Generates security key for the session using magic string and generated key.
+     * @param _secKey Client security key
+     * @return Server security key
+     */
+    private String generateSecurityKeyAccept (String _secKey) {
+    
+        try {
+            MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+            byte[] secKeyByte = (_secKey + StaticResources.MAGIC_STRING).getBytes();
+            secKeyByte = sha1.digest(secKeyByte);
+            _secKey = Base64.encodeBase64String(secKeyByte);
+    
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    
+        return _secKey;
+    }
+    
+    @Override
+    public void run() {
+    
+        System.out.println(this.clientSocket.getInetAddress().getAddress().toString() + StaticResources.CLIENT_CONNECTED);
+        this.doHandShake();
+    
+        this.sendWorker = new SendWorker();
+        this.subscribeToAllSensors(); //replace
+        while(this.isConnected) {
+    
+            try {
+                int opcode = this.input.read();  
+                @SuppressWarnings("unused")
+                boolean whole = (opcode & 0b10000000) !=0;  
+                opcode = opcode & 0xF;
+    
+                if (opcode != 8) { 
+    
+                    //handleClientMessage(read());  //TODO implement how to subscribe by basestation id not socket class uuid.
+                    this.sendDirectlyToClient(read());
+    
+    
+                } else {
+    
+                    /*|Opcode  | Meaning                             | Reference |
+		     -+--------+-------------------------------------+-----------|
+		      | 0      | Continuation Frame                  | RFC 6455  |
+		     -+--------+-------------------------------------+-----------|
+		      | 1      | Text Frame                          | RFC 6455  |
+		     -+--------+-------------------------------------+-----------|
+		      | 2      | Binary Frame                        | RFC 6455  |
+		     -+--------+-------------------------------------+-----------|
+		      | 8      | Connection Close Frame              | RFC 6455  |
+		     -+--------+-------------------------------------+-----------|
+		      | 9      | Ping Frame                          | RFC 6455  |
+		     -+--------+-------------------------------------+-----------|
+		      | 10     | Pong Frame                          | RFC 6455  |*/
+    
+                    System.out.println("Client message type: " + opcode);
+                    this.closeSocketGracefully();
+                }
+    
+    
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Connecttion interrupted: " + e.getLocalizedMessage());
+                this.closeSocketGracefully();
+            }
+        }
+        System.out.println(this.clientSocket.getInetAddress().getAddress().toString() + StaticResources.CLIENT_DISCONNECTED);
+        return;	//Exits thread
+    }
+    
+    private void subscribeToAllSensors() { 
+        ArrayList<String> devices = new ArrayList<String> ();
+        devices.add(UdpSocket.uuid);
+        MessageService.getInstance().subscribeByIds(devices, this.uuid);
+    
+    }
+    
+    private void sendDirectlyToClient(String _msg) {
+        String[] queries = _msg.split("&");
+        String deviceId[] = new String[1];
+        String message = null;
+    
+        if (queries != null) {
+            for (int i = 0; i < queries.length; i ++) {
+                String[] params = queries[i].split("=");
+                if (params!= null) {
+                    if (params[0].contentEquals("device_id")) {
+                        deviceId[0] = params[1];
+                    }
+                    if (params[0].contentEquals("message")) {
+                        message = params[1];
+                    }
+    
+                }
+            }
+            MessageService.getInstance().addToMessageBuffer(new MessageObject(this.uuid,StaticResources.TCP_CLIENT,DataStorageService.getInstance().resolveBaseStationAddresses(deviceId),message));
+    
+        }
+    }
+    
+    @SuppressWarnings("unused")
+    private void handleClientMessage(String _request) {
+        String[] result = _request.split("\n");
+        int fromIndex =  result[0].indexOf("?");
+        int toIndex = result[0].indexOf("HTTP");
+    
+        /* Passes the urlencoded query string to appropriate http method handlers*/
+        if (result[0].trim().toUpperCase().contains("GET")) {
+            this.handleGETMethod(result[0].substring(fromIndex + 1, toIndex).trim());
+    
+        }
+        else if (result[0].trim().toUpperCase().contains("POST")) {
+    
+            fromIndex =  result[0].indexOf("/");
+            String content = result[0].substring(fromIndex, toIndex);
+            if (content.trim().contentEquals("/")) {
+                this.handlePOSTMessage(result[result.length-1].toString());
+            } else {
+                send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
+            }
+    
+        }
+        else if (result[0].trim().toUpperCase().contains("PUT")) {
+            send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
+        }
+        else if (result[0].trim().toUpperCase().contains("DELETE")) {
+            send(StaticResources.ERROR_CODE_METHOD_NOT_ALLOWED);
+        }
+    }
+    
+    /**
+     * 
+     * @param _msg
+     */
+    private void handlePOSTMessage(String _msg) { //TODO design post method options
+    
+        String[] queries = _msg.split("&");
+        String[] targetUUIDs = null;
+    
+        for (int i = 0; i < queries.length; i++) {
+    
+            if(queries[i].contains("action")) {
+                String[] action = queries[i].split("=");
+    
+                if (action[1].contentEquals("update")) {
+    
+                    for (int j = 0; j < queries.length; j++) {
+    
+                        if (queries[j].contains("device_id")) {
+                            String[] s = queries.clone()[j].trim().split("=");
+                            targetUUIDs = s[1].split(","); //check correct regex
+                        } 
+                    }
+                }
+            }
+    
+        } if (targetUUIDs == null) {
+            try {
+                send(StaticResources.ERROR_CODE_BAD_REQUEST);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            MessageService.getInstance().addToMessageBuffer(new MessageObject(this.uuid,StaticResources.TCP_CLIENT,DataStorageService.getInstance().resolveBaseStationAddresses(targetUUIDs),_msg));
+        }
+    }
+    
+    /**
+     * 
+     * @param _content
+     */
+    private void handleGETMethod(String _content) {
+    
+        String[] queries = _content.split("&");
+    
+        for (int i = 0; i < queries.length; i++) {
+            if(queries[i].contains("action")) {
+                String[] action = queries[i].split("=");
+                if (action[1].contentEquals("subscribeById")) {
+                    for (int j = 0; j < queries.length;j++) {
+                        if (queries[j].contains("device_id")) {
+                            String[] device = queries[j].split("=");
+                            String[] targetUUIDs = device[1].split(",");
+                            MessageService.getInstance().subscribeByIds(DataStorageService.getInstance().resolveBaseStationUuids(targetUUIDs),uuid);
+                        }
+                    }
+    
+                } else if (action[1].contentEquals("unsubscribeById")) {
+    
+                    //TODO not implemented yet
+                } else if (action[1].contentEquals("unsubscribeAll")) {
+                    MessageService.getInstance().unregisterReceiver(uuid);
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     */
+    private void closeSocketGracefully() {
+        try {	
+            MessageService.getInstance().unsubscribeAllById(this.uuid);
+            this.sendWorker.destroy();
+            this.isConnected = false;
+            this.input.close();
+            this.clientSocket.close();
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    
+    }
+    
+    /**
+     * 
+     * @param b
+     * @throws IOException
+     */
+    private void readFully(byte[] b) throws IOException {  
+    
         int readen = 0;  
         while(readen<b.length)  
         {  
