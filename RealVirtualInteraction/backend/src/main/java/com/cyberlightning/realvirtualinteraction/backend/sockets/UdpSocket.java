@@ -53,7 +53,9 @@ public class UdpSocket implements Runnable  {
     } catch (SocketException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-      this.sendWorker.destroy();
+      if (this.sendWorker != null){
+          this.sendWorker.destroy();
+      }
     }
     
     while(true) {
