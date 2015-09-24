@@ -50,27 +50,31 @@ public class DataStorageService implements Runnable {
 	public void intializeData() {
 		
 		try {	
-	    	FileInputStream data = new FileInputStream(StaticResources.DATABASE_FILE_NAME);
-	        ObjectInputStream dataIn = new ObjectInputStream(data);
-	        this.entityTable = (EntityTable)dataIn.readObject();
-	        dataIn.close();
-	        data.close();
+		FileInputStream data = new FileInputStream(StaticResources.DATABASE_FILE_NAME);
+                ObjectInputStream dataIn = new ObjectInputStream(data);
+                this.entityTable = (EntityTable)dataIn.readObject();
+                dataIn.close();
+                data.close();
+                FileInputStream ref = new FileInputStream(StaticResources.REFERENCE_TABLE_FILE_NAME);
+                ObjectInputStream refIn = new ObjectInputStream(ref);
+                    this.baseStationReferences = (Map<String, InetSocketAddress>) refIn.readObject();
+                    refIn.close();
+                    ref.close();    
 	        
-	        FileInputStream ref = new FileInputStream(StaticResources.REFERENCE_TABLE_FILE_NAME);
-	        ObjectInputStream refIn = new ObjectInputStream(ref);
-	        this.baseStationReferences = (Map<String, InetSocketAddress>) refIn.readObject();
-	        refIn.close();
-	        ref.close();
 	         
 	        saveFileRoutine= new Thread((Runnable)(new SaveFileRoutine()));
 	        saveFileRoutine.start();
 	         
 	      } catch (IOException i) {
-	         i.printStackTrace();
-	         return;
+//	         i.printStackTrace();
+	         System.out.println("Database not found, create database. ");
+	         EntityTable e = entityTable;
+                 Map<String, InetSocketAddress> b = baseStationReferences;
+                 saveData(e,StaticResources.DATABASE_FILE_NAME);
+                 saveData(b, StaticResources.REFERENCE_TABLE_FILE_NAME);//remove these four lines at some point
+                 return;
 	      } catch(ClassNotFoundException c) {
-	         System.out.println("Database not found! ");
-	         
+	         System.out.println("Database not found. ");	         
 	         EntityTable e = entityTable;
 	         Map<String, InetSocketAddress> b = baseStationReferences;
 	         saveData(e,StaticResources.DATABASE_FILE_NAME);
