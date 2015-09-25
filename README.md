@@ -16,4 +16,4 @@ The Real/virtual Interaction component provides the ability to interact with rea
 
 FIWARE catalogue: [Real Virtual Interaction](http://catalogue.fiware.org/enablers/real-virtual-interaction)
 
-This GE in Dockerhub: [Real Virtual Interaction](https://hub.docker.com/r/juhahyva/rvi/)
+This GE in Dockerhub: [Real Virtual Interaction](https://hub.docker.com/r/fiware/realvirtualinteraction/)
