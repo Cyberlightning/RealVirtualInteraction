@@ -16,7 +16,7 @@ If you want to know what is behind the scenes of our container you can go ahead 
 
 ### Run the container
 
-docker run -t -i -P juhahyva/rvi
+docker run -t -i -P fiware/realvirtualinteraction
 
 You may define forwarded ports with -p flag
 
@@ -24,7 +24,7 @@ You may define forwarded ports with -p flag
 	
 Example:
 
-	sudo docker run -t -i -p 61616:61616/udp -p 61617:61617/udp -p 44445:44445/tcp -p 44446:44446/tcp juhahyva/rvi
+	sudo docker run -t -i -p 61616:61616/udp -p 61617:61617/udp -p 44445:44445/tcp -p 44446:44446/tcp fiware/realvirtualinteraction
 
 
 This pulls the image from the Docker Registry instead of building your own. Keep in mind though that everything is run locally. 
@@ -57,13 +57,13 @@ The following line will run the container exposing earlier mentioned internal do
 
 If you did not build the image yourself and want to use the one on Docker Hub use the following command:
 
-      sudo docker run -t -i -P juhahyva/rvi
+      sudo docker run -t -i -P fiware/realvirtualinteraction
 
 To define used ports on host machine use -p flag
 
 	-p <host_port>:<container_port/protocol>
 
-	sudo docker run -t -i -p 61616:61616/udp -p 61617:61617/udp -p 44445:44445/tcp -p 44446:44446/tcp juhahyva/rvi
+	sudo docker run -t -i -p 61616:61616/udp -p 61617:61617/udp -p 44445:44445/tcp -p 44446:44446/tcp fiware/realvirtualinteraction
 
 > **Note**
 > Keep in mind that if you use this last command you get access to the tags and specific versions of Real Virtual Interaction.
