@@ -13,6 +13,7 @@ This specification defines the RealVirtualInteraction API.
 ## Editors
 
   + Sami Jylkkä, Cyberlightning Ltd
+  + Juha Hyvärinen, Cyberlightning Ltd
   
 
 ## Status
@@ -374,12 +375,17 @@ with a geo-coordinate center point and radius in meters.
             }
         ]
         
-## loadById [/?action=loadById&device_id=440cd2d8c18d7d3a&maxResults=1]
+## loadById [/?action=loadById&device_id={device_id}&maxResults={maxResults}]
 
 <b>loadById</b> is used for requesting sensor data based on the device uuid.
 A device MAY contain any number of sensors and actuators, and in any combination. 
 If the requested sensor or actuator does not have uuid the request MUST target the device containing the 
 desired sensor or actuator. 
+
+
++ Parameters
+    + device_id: 440cd2d8c18d7d3a (Unique identifier for device)
+    + maxResults: 1 (Max number of search results)
 
 ### Load sensor by Id [GET]
 
@@ -532,7 +538,7 @@ information regarding a specific device by using an uuid string identifier.
             }
         ]
 
-## update [/?action=update&device_id={device_id}&sensor_id=display&parameter={parameter}&value={value}]
+## update [/?action=update&device_id={device_id}&sensor_id={sensor_id}&parameter={parameter}&value={value}]
 
 <b>update</b> HTTP POST method can be used for changing updatable sensor values. 
 Real virtual interaction backend uses the <i>device_id parameter</i> and looks up the IP address from reference table 
@@ -543,7 +549,8 @@ its destination as the transport mechanism is UDP. Otherwise server will respond
 
 + Parameters
     + device_id: 440cd2d8c18d7d3a () (required, string) - Id of the device to be updated
-    + parameter: viewstate (required, string) - Parameter to be updat
+    + sensor_id: display - Sensor ID to be updated
+    + parameter: viewstate (required, string) - Parameter to be updated
     + value: marker52 (required, string) - new value
 
 ### Update device by Id [POST]
